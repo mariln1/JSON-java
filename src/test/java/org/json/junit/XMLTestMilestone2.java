@@ -62,7 +62,7 @@ public class XMLTestMilestone2 {
     @Test
     public void testTask2Valid() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader("/Users/marilyn/Documents/School/UCI/SWE_262P/JSON-java/src/test/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
         JSONPointer ptr = new JSONPointer("/catalog");
         String expectedStr ="{\"book\": [\n" +
                 "  {\n" +
@@ -190,7 +190,7 @@ public class XMLTestMilestone2 {
     @Test
     public void testTask2ValidArr() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader("/Users/marilyn/Documents/School/UCI/SWE_262P/JSON-java/src/test/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
         JSONPointer ptr = new JSONPointer("/catalog/book/0");
         String expectedStr =
                 "  {\n" +
@@ -217,7 +217,7 @@ public class XMLTestMilestone2 {
     @Test
     public void testTask2InvalidPath() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader("/Users/marilyn/Documents/School/UCI/SWE_262P/JSON-java/src/test/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
         JSONPointer ptr = new JSONPointer("/catalog/book/poo");
         String expectedStr ="{}";
 
@@ -237,7 +237,7 @@ public class XMLTestMilestone2 {
     @Test
     public void testTask5ValidJSONObj() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader("/Users/marilyn/Documents/School/UCI/SWE_262P/JSON-java/src/test/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
         JSONObject replacement = new JSONObject("{\"Replacement key\":\"Replacement value\"}");
         String expectedStr = "{\"catalog\":{\"Replacement key\":\"Replacement value\"}}";
         JSONPointer ptr = new JSONPointer("/catalog/book");
@@ -257,7 +257,7 @@ public class XMLTestMilestone2 {
     @Test
     public void testTask5InvalidJSONObj() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader("/Users/marilyn/Documents/School/UCI/SWE_262P/JSON-java/src/test/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
         JSONObject replacement = new JSONObject("{\"Replacement key\":\"Replacement value\"}");
         String expectedStr = null;
         JSONPointer ptr = new JSONPointer("/poop");
@@ -276,7 +276,7 @@ public class XMLTestMilestone2 {
     @Test
     public void testTask5ValidJSONArr() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader("/Users/marilyn/Documents/School/UCI/SWE_262P/JSON-java/src/test/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
         JSONObject replacement = new JSONObject("{\"Replacement key\":\"Replacement value\"}");
         String expectedStr = "{\"catalog\": {\"book\": [\n" +
                 "  {\"Replacement key\": \"Replacement value\"},\n" +
@@ -388,7 +388,7 @@ public class XMLTestMilestone2 {
     @Test
     public void testTask5InvalidJSONArr() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader("/Users/marilyn/Documents/School/UCI/SWE_262P/JSON-java/src/test/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
         JSONObject replacement = new JSONObject("{\"Replacement key\":\"Replacement value\"}");
         String expectedStr = null;
         JSONPointer ptr = new JSONPointer("/catalog/book/100");
