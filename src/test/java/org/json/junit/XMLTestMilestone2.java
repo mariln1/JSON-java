@@ -62,7 +62,7 @@ public class XMLTestMilestone2 {
     @Test
     public void testTask2Valid() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/src/test/java/org/json/junit/xmls/books.xml");
         JSONPointer ptr = new JSONPointer("/catalog");
         String expectedStr ="{\"book\": [\n" +
                 "  {\n" +
@@ -190,18 +190,18 @@ public class XMLTestMilestone2 {
     @Test
     public void testTask2ValidArr() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/src/test/java/org/json/junit/xmls/books.xml");
         JSONPointer ptr = new JSONPointer("/catalog/book/0");
         String expectedStr =
-                "  {\n" +
-                "    \"author\": \"Gambardella, Matthew\",\n" +
-                "    \"price\": 44.95,\n" +
-                "    \"genre\": \"Computer\",\n" +
-                "    \"description\": \"An in-depth look at creating applications \\n      with XML.\",\n" +
-                "    \"id\": \"bk101\",\n" +
-                "    \"title\": \"XML Developer's Guide\",\n" +
-                "    \"publish_date\": \"2000-10-01\"\n" +
-                "  }";
+                "{\n" +
+                        "  \"author\": \"Gambardella, Matthew\",\n" +
+                        "  \"price\": 44.95,\n" +
+                        "  \"genre\": \"Computer\",\n" +
+                        "  \"description\": \"An in-depth look at creating applications \\n      with XML.\",\n" +
+                        "  \"id\": \"bk101\",\n" +
+                        "  \"title\": \"XML Developer's Guide\",\n" +
+                        "  \"publish_date\": \"2000-10-01\"\n" +
+                        "}";
 
         // WHEN
         JSONObject jsonObject = XML.toJSONObject(reader, ptr);
@@ -212,21 +212,42 @@ public class XMLTestMilestone2 {
     }
 
     /**
-     * Tests if toJSONObject returns an empty sub-object given a valid XML and valid JSONPointer whose key path does not exist
+     * Tests if toJSONObject throws JSONPointerError given a valid XML and valid JSONPointer whose key path does not exist
      */
     @Test
     public void testTask2InvalidPath() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/src/test/java/org/json/junit/xmls/books.xml");
         JSONPointer ptr = new JSONPointer("/catalog/book/poo");
-        String expectedStr ="{}";
 
-        // WHEN
-        JSONObject jsonObject = XML.toJSONObject(reader, ptr);
+        try {
+            // WHEN
+            JSONObject jsonObject = XML.toJSONObject(reader, ptr);
 
-        //THEN
-        Assert.assertEquals(expectedStr, jsonObject.toString());
-        //Util.compareActualVsExpectedJsonObjects(jsonObject,expectedJsonObject);
+            // THEN
+            fail( "My method didn't throw when I expected it to" );
+        } catch (JSONPointerException expectedException) {
+        }
+    }
+
+    /**
+     * Tests if toJSONObject throws a ClassCastException when the sub object is not a JSONObject
+     * given a valid XML and valid JSONPointer
+     */
+    @Test
+    public void testTask2InvalidObj() throws IOException {
+        // GIVEN
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/src/test/java/org/json/junit/xmls/books.xml");
+        JSONPointer ptr = new JSONPointer("/catalog/book/0/author");
+
+        try {
+            // WHEN
+            JSONObject jsonObject = XML.toJSONObject(reader, ptr);
+
+            // THEN
+            fail( "My method didn't throw when I expected it to" );
+        } catch (ClassCastException expectedException) {
+        }
     }
 
     /**
@@ -237,7 +258,7 @@ public class XMLTestMilestone2 {
     @Test
     public void testTask5ValidJSONObj() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/src/test/java/org/json/junit/xmls/books.xml");
         JSONObject replacement = new JSONObject("{\"Replacement key\":\"Replacement value\"}");
         String expectedStr = "{\"catalog\":{\"Replacement key\":\"Replacement value\"}}";
         JSONPointer ptr = new JSONPointer("/catalog/book");
@@ -257,7 +278,7 @@ public class XMLTestMilestone2 {
     @Test
     public void testTask5InvalidJSONObj() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/src/test/java/org/json/junit/xmls/books.xml");
         JSONObject replacement = new JSONObject("{\"Replacement key\":\"Replacement value\"}");
         String expectedStr = null;
         JSONPointer ptr = new JSONPointer("/poop");
@@ -276,7 +297,7 @@ public class XMLTestMilestone2 {
     @Test
     public void testTask5ValidJSONArr() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/src/test/java/org/json/junit/xmls/books.xml");
         JSONObject replacement = new JSONObject("{\"Replacement key\":\"Replacement value\"}");
         String expectedStr = "{\"catalog\": {\"book\": [\n" +
                 "  {\"Replacement key\": \"Replacement value\"},\n" +
@@ -388,7 +409,7 @@ public class XMLTestMilestone2 {
     @Test
     public void testTask5InvalidJSONArr() throws IOException {
         // GIVEN
-        FileReader reader = new FileReader(System.getProperty("user.dir") + "/java/org/json/junit/xmls/books.xml");
+        FileReader reader = new FileReader(System.getProperty("user.dir") + "/src/test/java/org/json/junit/xmls/books.xml");
         JSONObject replacement = new JSONObject("{\"Replacement key\":\"Replacement value\"}");
         String expectedStr = null;
         JSONPointer ptr = new JSONPointer("/catalog/book/100");
