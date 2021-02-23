@@ -36,16 +36,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * A JSONObject is an unordered collection of name/value pairs. Its external
@@ -101,6 +95,62 @@ import java.util.regex.Pattern;
  * @version 2016-08-15
  */
 public class JSONObject {
+
+    private Stream.Builder<JSONObject> sb = Stream.builder();
+
+    /**
+     * MILESTONE 4
+     * Adds JSONObjects within a JSONObject to a stream
+     * @return sb stream of JSONObjects
+     */
+    public Stream<JSONObject> toStream() {
+        helper( "", this);
+        return sb.build();
+
+    }
+
+    /**
+     * MILESTONE 4
+     * Helper method to do DFS on JSONObject & adds subobjects to stream sb
+     * @param key id of the JSON Object
+     * @param obj the JSON object being observed
+     */
+    private void helper(String key, Object obj) {
+        JSONObject context = new JSONObject();
+        if (obj instanceof JSONObject) {
+            for (Entry<String, Object> kv : ((JSONObject)obj).entrySet()) {
+                if ( kv.getValue() instanceof JSONObject || kv.getValue() instanceof JSONArray) {
+                    helper(kv.getKey(), kv.getValue());
+                }
+                else {
+                    context.accumulate(kv.getKey(), kv.getValue());
+                }
+                //System.out.println(kv.toString());
+            }
+            if (!context.isEmpty()) {
+                sb.accept(context);
+            }
+        }
+
+        else if (obj instanceof JSONArray) {
+            for (Object o: (JSONArray)obj) {
+                if (obj instanceof JSONObject || obj instanceof JSONArray) {
+                    helper(key, o);
+                }
+                else {
+                    context.accumulate(key, obj);
+                }
+            }
+            if (!context.isEmpty()) {
+                sb.accept(context);
+            }
+        }
+        else {
+            throw new JSONException("Not a valid JSON Object! Got a " + obj.getClass().getName() + " instead.");
+        }
+    }
+
+
     /**
      * JSONObject.NULL is equivalent to the value that JavaScript calls null,
      * whilst Java's null is equivalent to the value that JavaScript calls
