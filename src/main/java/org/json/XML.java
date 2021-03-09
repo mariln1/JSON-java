@@ -31,6 +31,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.*;
 import java.util.function.Function;
 
 
@@ -1143,6 +1144,38 @@ public class XML {
             }
         }
         return obj;
+    }
+    /**
+     * MILESTONE 5
+     * Asynchronous method to read JSON objects from XML file
+     * Submits a ThreadTask object to an ExecutorService to read the XML file
+     *
+     */
+    public static class AsyncJSON {
+        private final ExecutorService service = Executors.newSingleThreadExecutor();
+
+        public Future<JSONObject> submitTask(Reader reader) {
+            return this.service.submit(new ThreadTask(reader));
+        }
+
+        public void shutdownAndClose() throws InterruptedException {
+            this.service.shutdown();
+            this.service.awaitTermination(1, TimeUnit.MINUTES);
+        }
+    }
+
+
+    public static class ThreadTask implements Callable<JSONObject> {
+        private Reader reader;
+
+        public ThreadTask(Reader reader) {
+            this.reader = reader;
+        }
+
+        @Override
+        public JSONObject call() {
+            return toJSONObject(reader);
+        }
     }
 
     /**
